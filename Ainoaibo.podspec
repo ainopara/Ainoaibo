@@ -43,7 +43,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'InMemoryLogViewer' do |ss|
-    ss.source_files = "Sources/InMemoryLogViewer/*.{swift}"
+    ss.source_files = "Ainoaibo/InMemoryLogViewer/*.{swift}"
     ss.dependency "Ainoaibo/InMemoryLogger"
     ss.dependency "SnapKit"
   end
