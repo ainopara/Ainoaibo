@@ -57,6 +57,26 @@ Used to inspect logs inside application. It is specially useful when your applic
 let dependency = ["Ainoaibo/InMemoryLogger", "SnapKit"]
 ```
 
+#### Usage
+`InMemoryLogViewController` is expected to be embedded in a `UINavigationController`.
+
+```swift
+let debugTab = UINavigationController(rootViewController:
+    InMemoryLogViewController()
+)
+
+let tabBarController = UITabBarController(nibName: nil, bundle: nil)
+tabBarController.viewControllers = [
+    debugTab
+]
+```
+
+or
+
+```swift
+self.navigationController?.pushViewController(InMemoryLogViewController(), animated: true)
+```
+
 ### Formatters
 
 `DateLogFormatter`: Insert timestamp at the beginning of every log message.
