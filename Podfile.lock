@@ -1,0 +1,41 @@
+PODS:
+  - CocoaLumberjack (3.4.2):
+    - CocoaLumberjack/Default (= 3.4.2)
+    - CocoaLumberjack/Extensions (= 3.4.2)
+  - CocoaLumberjack/Default (3.4.2)
+  - CocoaLumberjack/Extensions (3.4.2):
+    - CocoaLumberjack/Default
+  - CocoaLumberjack/Swift (3.4.2):
+    - CocoaLumberjack/Default
+  - ReactiveSwift (3.1.0):
+    - Result (~> 3.2)
+  - Result (3.2.4)
+
+DEPENDENCIES:
+  - CocoaLumberjack (from `https://github.com/ainopara/CocoaLumberjack.git`, branch `dispatch-queue-formatter-enhancement`)
+  - CocoaLumberjack/Swift (from `https://github.com/ainopara/CocoaLumberjack.git`, branch `dispatch-queue-formatter-enhancement`)
+  - ReactiveSwift
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - ReactiveSwift
+    - Result
+
+EXTERNAL SOURCES:
+  CocoaLumberjack:
+    :branch: dispatch-queue-formatter-enhancement
+    :git: https://github.com/ainopara/CocoaLumberjack.git
+
+CHECKOUT OPTIONS:
+  CocoaLumberjack:
+    :commit: 6e2970cb86a0737e7d92600f7eb764bb0703713f
+    :git: https://github.com/ainopara/CocoaLumberjack.git
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
+  ReactiveSwift: 5b26d2e988fe0eed2daf48c4054d1de74db50184
+  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+
+PODFILE CHECKSUM: 5dbec5d3e4264eae25f003e95a72bbd7ef0f86de
+
+COCOAPODS: 1.5.3
