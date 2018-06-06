@@ -19,14 +19,14 @@ A shared defination which is used to help Applications / other frameworks create
 A `CocoaLumberjack` logger which can utilize information extracted from objects conforming to `LoggingProtocol`.
 
 ```swift
-let dependency = ["Ainoaibo/LoggingProtocol", "CocoaLumberjack", "CocoaLumberjack/Swift"]
+let dependency = ["Ainoaibo/LoggingProtocol", "CocoaLumberjack"]
 ```
 
 ### Logging
 An internal component which offer helper function for logging which is supposed to be used by other components in this repo.
 
 ```swift
-let dependency = ["Ainoaibo/LoggingProtocol", "CocoaLumberjack", "CocoaLumberjack/Swift"]
+let dependency = ["Ainoaibo/LoggingProtocol", "CocoaLumberjack"]
 ```
 
 ### DefaultsBasedSettings
@@ -41,6 +41,32 @@ A collection of helper function and extension about types in Swift Standard Libr
 
 ```swift
 let dependency = []
+```
+
+### InMemoryLogger
+Save logs in memory and can be accessed inside application.
+
+```swift
+let dependency = ["CocoaLumberjack"]
+```
+
+### InMemoryLogViewer
+Used to inspect logs inside application. It is specially useful when your application encouter a bug that hard to reproduce while debugger is not attaching to the process.
+
+```swift
+let dependency = ["Ainoaibo/InMemoryLogger", "SnapKit"]
+```
+
+### Formatters
+
+`DateLogFormatter`: Insert timestamp at the beginning of every log message.
+
+`DispatchQueueLogFormatter`: Insert dispatch queue at the beginning of every log message.
+
+`ErrorLevelLogFormatter`: Insert error level of the message at the beginning of every log message.
+
+```swift
+let dependency = ["CocoaLumberjack"]
 ```
 
 ## License
