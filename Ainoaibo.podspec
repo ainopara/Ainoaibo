@@ -35,12 +35,30 @@ Pod::Spec.new do |s|
     ss.dependency "Ainoaibo/LoggingProtocol"
   end
 
+  s.subspec 'InMemoryLogger' do |ss|
+    ss.source_files = "Ainoaibo/InMemoryLogger/*.swift"
+    ss.dependency "CocoaLumberjack"
+    ss.dependency "CocoaLumberjack/Swift"
+    ss.dependency "Ainoaibo/LoggingProtocol"
+  end
+
+  s.subspec 'InMemoryLogViewer' do |ss|
+    ss.source_files = "Sources/InMemoryLogViewer/*.{swift}"
+    ss.dependency "Ainoaibo/InMemoryLogger"
+    ss.dependency "SnapKit"
+  end
+
+  s.subspec 'LogFormatters' do |ss|
+    ss.source_files = "Ainoaibo/LogFormatters/*.{swift}"
+    ss.dependency "CocoaLumberjack"
+  end
+
   s.subspec 'SwiftExtension' do |ss|
     ss.source_files = "Ainoaibo/SwiftExtension/*.swift"
   end
 
   s.subspec 'DefaultsBasedSettings' do |ss|
-    ss.source_files = "Ainoaibo/Settings/*.swift"
+    ss.source_files = "Ainoaibo/DefaultsBasedSettings/*.swift"
     ss.dependency "Ainoaibo/Logging"
     ss.dependency "ReactiveSwift"
   end
