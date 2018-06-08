@@ -11,6 +11,7 @@
 		864D4C0320C6D75800FAC039 /* Ainoaibo.h in Headers */ = {isa = PBXBuildFile; fileRef = 864D4C0120C6D75800FAC039 /* Ainoaibo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		864D4C0A20C6D7BE00FAC039 /* DefaultsBasedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */; };
 		8652E39520C7AD930074815D /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652E39420C7AD930074815D /* Logging.swift */; };
+		865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */; };
 		869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D6B1D20C7C58700B0596C /* OSLogger.swift */; };
 		869D6B2020C7C59B00B0596C /* LoggingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D6B1F20C7C59B00B0596C /* LoggingProtocol.swift */; };
 		869D6B2520C7CF6C00B0596C /* SwiftExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */; };
@@ -22,6 +23,8 @@
 		864D4C0220C6D75800FAC039 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultsBasedSettings.swift; sourceTree = "<group>"; };
 		8652E39420C7AD930074815D /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BijectiveDictionary.swift; sourceTree = "<group>"; };
+		867A112C20CA5435005C40A9 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		869D6B1C20C7BF1E00B0596C /* Ainoaibo.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Ainoaibo.podspec; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		869D6B1D20C7C58700B0596C /* OSLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSLogger.swift; sourceTree = "<group>"; };
 		869D6B1F20C7C59B00B0596C /* LoggingProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingProtocol.swift; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 		864D4BF420C6D75800FAC039 = {
 			isa = PBXGroup;
 			children = (
+				867A112C20CA5435005C40A9 /* Playground.playground */,
 				864D4C0020C6D75800FAC039 /* Ainoaibo */,
 				864D4BFF20C6D75800FAC039 /* Products */,
 				0804F68CEFD0ECC6EF58F137 /* Pods */,
@@ -86,7 +90,7 @@
 				869D6B2220C7C75200B0596C /* LoggingProtocol */,
 				869D6B2120C7C74400B0596C /* OSLogger */,
 				869D6B1A20C7BED800B0596C /* Logging */,
-				869D6B1B20C7BEE500B0596C /* Settings */,
+				869D6B1B20C7BEE500B0596C /* DefaultsBasedSettings */,
 				864D4C0120C6D75800FAC039 /* Ainoaibo.h */,
 				864D4C0220C6D75800FAC039 /* Info.plist */,
 			);
@@ -101,12 +105,12 @@
 			path = Logging;
 			sourceTree = "<group>";
 		};
-		869D6B1B20C7BEE500B0596C /* Settings */ = {
+		869D6B1B20C7BEE500B0596C /* DefaultsBasedSettings */ = {
 			isa = PBXGroup;
 			children = (
 				864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */,
 			);
-			path = Settings;
+			path = DefaultsBasedSettings;
 			sourceTree = "<group>";
 		};
 		869D6B2120C7C74400B0596C /* OSLogger */ = {
@@ -129,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */,
+				865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */,
 			);
 			path = SwiftExtension;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				864D4C0A20C6D7BE00FAC039 /* DefaultsBasedSettings.swift in Sources */,
+				865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */,
 				869D6B2020C7C59B00B0596C /* LoggingProtocol.swift in Sources */,
 				869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */,
 				869D6B2520C7CF6C00B0596C /* SwiftExtension.swift in Sources */,
