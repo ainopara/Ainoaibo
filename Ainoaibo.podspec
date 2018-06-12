@@ -62,4 +62,12 @@ Pod::Spec.new do |s|
     ss.dependency "Ainoaibo/Logging"
     ss.dependency "ReactiveSwift"
   end
+
+  s.subspec 'StateTransition' do |ss|
+    ss.source_files = "Ainoaibo/StateTransition/*.swift"
+  end
+
+  s.subspec 'Stash' do |ss|
+    ss.source_files = "Ainoaibo/Stash/Stash.swift"
+  end
 end

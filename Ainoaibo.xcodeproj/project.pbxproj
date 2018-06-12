@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3CD7C17FB78C3748C4D97416 /* Pods_Ainoaibo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97DACCF32862BB4BA4A00512 /* Pods_Ainoaibo.framework */; };
+		864A924B20CFDDC900CDEDB8 /* StateTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864A924A20CFDDC900CDEDB8 /* StateTransition.swift */; };
+		864A925220CFDE8400CDEDB8 /* Stash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864A925120CFDE8400CDEDB8 /* Stash.swift */; };
 		864D4C0320C6D75800FAC039 /* Ainoaibo.h in Headers */ = {isa = PBXBuildFile; fileRef = 864D4C0120C6D75800FAC039 /* Ainoaibo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		864D4C0A20C6D7BE00FAC039 /* DefaultsBasedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */; };
 		8652E39520C7AD930074815D /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652E39420C7AD930074815D /* Logging.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		864A924A20CFDDC900CDEDB8 /* StateTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateTransition.swift; sourceTree = "<group>"; };
+		864A925120CFDE8400CDEDB8 /* Stash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stash.swift; sourceTree = "<group>"; };
 		864D4BFE20C6D75800FAC039 /* Ainoaibo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ainoaibo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		864D4C0120C6D75800FAC039 /* Ainoaibo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ainoaibo.h; sourceTree = "<group>"; };
 		864D4C0220C6D75800FAC039 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,6 +67,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		864A924920CFDDC900CDEDB8 /* StateTransition */ = {
+			isa = PBXGroup;
+			children = (
+				864A924A20CFDDC900CDEDB8 /* StateTransition.swift */,
+			);
+			path = StateTransition;
+			sourceTree = "<group>";
+		};
+		864A925020CFDE8400CDEDB8 /* Stash */ = {
+			isa = PBXGroup;
+			children = (
+				864A925120CFDE8400CDEDB8 /* Stash.swift */,
+			);
+			path = Stash;
+			sourceTree = "<group>";
+		};
 		864D4BF420C6D75800FAC039 = {
 			isa = PBXGroup;
 			children = (
@@ -86,11 +106,13 @@
 			isa = PBXGroup;
 			children = (
 				869D6B1C20C7BF1E00B0596C /* Ainoaibo.podspec */,
+				864A924920CFDDC900CDEDB8 /* StateTransition */,
 				869D6B2320C7CF4A00B0596C /* SwiftExtension */,
 				869D6B2220C7C75200B0596C /* LoggingProtocol */,
 				869D6B2120C7C74400B0596C /* OSLogger */,
 				869D6B1A20C7BED800B0596C /* Logging */,
 				869D6B1B20C7BEE500B0596C /* DefaultsBasedSettings */,
+				864A925020CFDE8400CDEDB8 /* Stash */,
 				864D4C0120C6D75800FAC039 /* Ainoaibo.h */,
 				864D4C0220C6D75800FAC039 /* Info.plist */,
 			);
@@ -240,7 +262,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				864D4C0A20C6D7BE00FAC039 /* DefaultsBasedSettings.swift in Sources */,
+				864A925220CFDE8400CDEDB8 /* Stash.swift in Sources */,
 				865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */,
+				864A924B20CFDDC900CDEDB8 /* StateTransition.swift in Sources */,
 				869D6B2020C7C59B00B0596C /* LoggingProtocol.swift in Sources */,
 				869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */,
 				869D6B2520C7CF6C00B0596C /* SwiftExtension.swift in Sources */,
