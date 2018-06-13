@@ -1,8 +1,8 @@
 
 public enum StateTransitionRuleResult {
-    case allow
+    case accept
     case reject
-    case notApplicable
+    case notSpecified
 }
 
 open class StateTransitionBehavior<ViewModel: AnyObject, State, Action> {
@@ -14,7 +14,7 @@ open class StateTransitionBehavior<ViewModel: AnyObject, State, Action> {
 
     public init() {}
 
-    open func checkTransition(action: Action, from: State, to: State) -> StateTransitionRuleResult { return .notApplicable }
+    open func checkTransition(action: Action, from: State, to: State) -> StateTransitionRuleResult { return .notSpecified }
     open func preTransition(action: Action, from: State, to: State) {}
     open func postTransition(action: Action, from: State, to: State) {}
 }
