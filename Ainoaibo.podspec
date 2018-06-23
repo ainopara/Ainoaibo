@@ -67,6 +67,18 @@ Pod::Spec.new do |s|
     ss.source_files = "Ainoaibo/StateTransition/*.swift"
   end
 
+  s.subspec 'Alamofire+ResponseDecodable' do |ss|
+    ss.source_files = "Ainoaibo/Alamofire+ResponseDecodable/*.swift"
+    ss.dependency "Ainoaibo/Logging"
+    ss.dependency "Alamofire"
+  end
+
+  s.subspec 'AuthNetworkManager' do |ss|
+    ss.source_files = "Ainoaibo/AuthNetworkManager/*.swift"
+    ss.dependency "Ainoaibo/Alamofire+ResponseDecodable"
+    ss.dependency "Ainoaibo/Logging"
+  end
+
   s.subspec 'Stash' do |ss|
     ss.source_files = "Ainoaibo/Stash/Stash.swift"
   end

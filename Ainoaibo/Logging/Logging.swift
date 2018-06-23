@@ -13,6 +13,7 @@ public var AIBOAsynchronousLogging = false
 enum LogCategory: String, OSLoggerIndexable {
     case `default`
     case settings
+    case network
 
     var description: String {
         return self.rawValue

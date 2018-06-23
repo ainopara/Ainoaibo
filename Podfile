@@ -6,6 +6,7 @@ target 'Ainoaibo' do
   use_frameworks!
 
   # Pods for Ainoaibo
+  pod 'Alamofire'
   pod 'ReactiveSwift'
   pod 'CocoaLumberjack', :git => 'https://github.com/ainopara/CocoaLumberjack.git', :branch => 'dispatch-queue-formatter-enhancement'
   pod 'CocoaLumberjack/Swift', :git => 'https://github.com/ainopara/CocoaLumberjack.git', :branch => 'dispatch-queue-formatter-enhancement'
