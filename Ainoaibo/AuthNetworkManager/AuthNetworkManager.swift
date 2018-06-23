@@ -23,15 +23,22 @@ public enum AuthError: Error {
 
 // MARK: -
 
-public final class AuthNetworkManager: SessionManager {
+public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate {
     public let clientID: String
     public let clientSecret: String
     public let redirectURI: String
     public let authorizeURL: String
     public let accessTokenURL: String
 
+    public var retrier: RequestRetrier? {
+        get { return sessionManager.retrier }
+        set { sessionManager.retrier = newValue }
+    }
+
+    private let sessionManager: SessionManager
+
     private var currentSession: Any?
-    public private(set) var safariViewController: SFSafariViewController?
+    private weak var safariViewController: SFSafariViewController?
     private var savedCompletionHandler: ((Result<String>) -> Void)?
 
     public init(clientID: String, clientSecret: String, authorizeURL: String, redirectURI: String, accessTokenURL: String) {
@@ -43,8 +50,9 @@ public final class AuthNetworkManager: SessionManager {
 
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        self.sessionManager = SessionManager(configuration: configuration)
 
-        super.init(configuration: configuration)
+        super.init()
     }
 
     public func authorizeCode(state: String, completion: @escaping (Result<String>) -> Void) {
@@ -118,8 +126,9 @@ public final class AuthNetworkManager: SessionManager {
             session.start()
         } else {
             // Fallback on earlier versions
-            let viewController = SFSafariViewController(url: targetURL)
-            self.safariViewController = viewController
+            let safariViewController = SFSafariViewController(url: targetURL)
+            safariViewController.delegate = self
+            self.safariViewController = safariViewController
             guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
                 completion(.failure(AuthError.presentationError))
                 return
@@ -127,11 +136,11 @@ public final class AuthNetworkManager: SessionManager {
 
             savedCompletionHandler = completion
 
-            rootViewController.present(viewController, animated: true, completion: nil)
+            rootViewController.present(safariViewController, animated: true, completion: nil)
         }
     }
 
-    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
+//    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
     public func continueAuthorizeCode(callbackURL: URL) {
         guard let completion = savedCompletionHandler else {
             LogError("Get callback with url: \(callbackURL) but can not found saved completion handler.")
@@ -146,13 +155,20 @@ public final class AuthNetworkManager: SessionManager {
             return
         }
 
-        completion(.success(code))
+        guard let safariViewController = self.safariViewController else {
+            completion(.failure(AuthError.presentationError))
+            return
+        }
 
-        savedCompletionHandler = nil
+        safariViewController.dismiss(animated: true) {
+            completion(.success(code))
+
+            self.savedCompletionHandler = nil
+        }
     }
 
-    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
-    public func cancelAuthorizeCode() {
+//    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
+    private func cancelAuthorizeCode() {
         guard let completion = savedCompletionHandler else {
             LogError("Cancel called but can not found saved completion handler.")
             return
@@ -161,6 +177,11 @@ public final class AuthNetworkManager: SessionManager {
         completion(.failure(AuthError.cancelled))
 
         savedCompletionHandler = nil
+    }
+
+
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        cancelAuthorizeCode()
     }
 
     @discardableResult
@@ -178,7 +199,7 @@ public final class AuthNetworkManager: SessionManager {
             "state": state
         ]
 
-        let request = self.request(
+        let request = self.sessionManager.request(
             accessTokenURL,
             method: .post,
             parameters: params
@@ -202,7 +223,7 @@ public final class AuthNetworkManager: SessionManager {
             "redirect_uri": redirectURI
         ]
 
-        let request = self.request(
+        let request = self.sessionManager.request(
             accessTokenURL,
             method: .post,
             parameters: params
