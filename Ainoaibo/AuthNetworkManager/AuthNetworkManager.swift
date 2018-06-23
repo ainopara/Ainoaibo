@@ -74,8 +74,8 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
 
         if #available(iOS 12.0, *) {
             let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
-                if let error = error {
-                    completion(.failure(AuthError.serverError(message: "\(error)")))
+                if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
+                    completion(.failure(AuthError.cancelled))
                     return
                 }
 
@@ -100,13 +100,13 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
             session.start()
         } else if #available(iOS 11.0, *) {
             let session = SFAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
-                if let error = error {
-                    completion(.failure(AuthError.serverError(message: "\(error)")))
+                if let error = error as? SFAuthenticationError, error.code == .canceledLogin {
+                    completion(.failure(AuthError.cancelled))
                     return
                 }
 
                 guard let callbackURL = callbackURL else {
-                    completion(.failure(AuthError.missingToken))
+                    completion(.failure(AuthError.missingCallback))
                     return
                 }
 
