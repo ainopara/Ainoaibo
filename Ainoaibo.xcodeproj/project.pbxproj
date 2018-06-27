@@ -19,6 +19,7 @@
 		869D6B2520C7CF6C00B0596C /* SwiftExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */; };
 		86A50A9B20DDF4D00029FFC5 /* AuthNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A50A9A20DDF4D00029FFC5 /* AuthNetworkManager.swift */; };
 		86A50A9E20DDF6880029FFC5 /* Alamofire+ResponseDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A50A9D20DDF6880029FFC5 /* Alamofire+ResponseDecodable.swift */; };
+		86BC799E20E3A58B00AD576D /* QuickSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BC799D20E3A58B00AD576D /* QuickSort.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftExtension.swift; sourceTree = "<group>"; };
 		86A50A9A20DDF4D00029FFC5 /* AuthNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNetworkManager.swift; sourceTree = "<group>"; };
 		86A50A9D20DDF6880029FFC5 /* Alamofire+ResponseDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+ResponseDecodable.swift"; sourceTree = "<group>"; };
+		86BC799D20E3A58B00AD576D /* QuickSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSort.swift; sourceTree = "<group>"; };
 		97DACCF32862BB4BA4A00512 /* Pods_Ainoaibo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ainoaibo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B9A300E17CA8A871894003D /* Pods-Ainoaibo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ainoaibo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ainoaibo/Pods-Ainoaibo.release.xcconfig"; sourceTree = "<group>"; };
 		F1DC5F09FBE7441CFF9A2C3E /* Pods-Ainoaibo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ainoaibo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ainoaibo/Pods-Ainoaibo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			children = (
 				869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */,
 				865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */,
+				86BC799D20E3A58B00AD576D /* QuickSort.swift */,
 			);
 			path = SwiftExtension;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				86A50A9B20DDF4D00029FFC5 /* AuthNetworkManager.swift in Sources */,
 				864A925220CFDE8400CDEDB8 /* Stash.swift in Sources */,
 				865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */,
+				86BC799E20E3A58B00AD576D /* QuickSort.swift in Sources */,
 				864A924B20CFDDC900CDEDB8 /* StateTransition.swift in Sources */,
 				869D6B2020C7C59B00B0596C /* LoggingProtocol.swift in Sources */,
 				869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */,
