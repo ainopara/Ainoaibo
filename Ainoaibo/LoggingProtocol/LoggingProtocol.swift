@@ -7,6 +7,7 @@ public protocol OSLoggerIndexable: CustomStringConvertible {
 public protocol OSLoggerTag {
     var rawCategory: OSLoggerIndexable { get }
     var rawSubsystem: OSLoggerIndexable { get }
+    var dso: UnsafeRawPointer { get }
 }
 
 extension OSLoggerTag {

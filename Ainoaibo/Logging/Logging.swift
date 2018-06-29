@@ -38,13 +38,15 @@ enum LogSubsystem: String, OSLoggerIndexable {
 class LoggerTag: OSLoggerTag {
     let subsystem: LogSubsystem
     let category: LogCategory
+    let dso: UnsafeRawPointer
 
     var rawSubsystem: OSLoggerIndexable { return subsystem }
     var rawCategory: OSLoggerIndexable { return category }
 
-    init(subsystem: LogSubsystem, category: LogCategory) {
+    init(subsystem: LogSubsystem, category: LogCategory, dso: UnsafeRawPointer) {
         self.subsystem = subsystem
         self.category = category
+        self.dso = dso
     }
 }
 
@@ -52,6 +54,7 @@ func LogDebug(
     _ message: @autoclosure () -> String,
     level: DDLogLevel = defaultDebugLevel,
     context: Int = 0,
+    dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
     function: StaticString = #function,
     line: UInt = #line,
@@ -68,7 +71,7 @@ func LogDebug(
         file: file,
         function: function,
         line: line,
-        tag: LoggerTag(subsystem: subsystem, category: category),
+        tag: LoggerTag(subsystem: subsystem, category: category, dso: dso),
         asynchronous: async,
         ddlog: ddlog
     )
@@ -78,6 +81,7 @@ func LogInfo(
     _ message: @autoclosure () -> String,
     level: DDLogLevel = defaultDebugLevel,
     context: Int = 0,
+    dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
     function: StaticString = #function,
     line: UInt = #line,
@@ -94,7 +98,7 @@ func LogInfo(
         file: file,
         function: function,
         line: line,
-        tag: LoggerTag(subsystem: subsystem, category: category),
+        tag: LoggerTag(subsystem: subsystem, category: category, dso: dso),
         asynchronous: async,
         ddlog: ddlog
     )
@@ -104,6 +108,7 @@ func LogWarn(
     _ message: @autoclosure () -> String,
     level: DDLogLevel = defaultDebugLevel,
     context: Int = 0,
+    dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
     function: StaticString = #function,
     line: UInt = #line,
@@ -120,7 +125,7 @@ func LogWarn(
         file: file,
         function: function,
         line: line,
-        tag: LoggerTag(subsystem: subsystem, category: category),
+        tag: LoggerTag(subsystem: subsystem, category: category, dso: dso),
         asynchronous: async,
         ddlog: ddlog
     )
@@ -130,6 +135,7 @@ func LogVerbose(
     _ message: @autoclosure () -> String,
     level: DDLogLevel = defaultDebugLevel,
     context: Int = 0,
+    dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
     function: StaticString = #function,
     line: UInt = #line,
@@ -146,7 +152,7 @@ func LogVerbose(
         file: file,
         function: function,
         line: line,
-        tag: LoggerTag(subsystem: subsystem, category: category),
+        tag: LoggerTag(subsystem: subsystem, category: category, dso: dso),
         asynchronous: async,
         ddlog: ddlog
     )
@@ -156,6 +162,7 @@ func LogError(
     _ message: @autoclosure () -> String,
     level: DDLogLevel = defaultDebugLevel,
     context: Int = 0,
+    dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
     function: StaticString = #function,
     line: UInt = #line,
@@ -172,7 +179,7 @@ func LogError(
         file: file,
         function: function,
         line: line,
-        tag: LoggerTag(subsystem: subsystem, category: category),
+        tag: LoggerTag(subsystem: subsystem, category: category, dso: dso),
         asynchronous: async,
         ddlog: ddlog
     )

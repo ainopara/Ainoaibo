@@ -26,8 +26,9 @@ open class OSLogger: DDAbstractLogger {
 
         let type = self.logLevel(of: logMessage.flag)
         let log = self.logTarget(of: logMessage.tag)
+        let dso = self.dynamicSharedObject(from: logMessage.tag)
 
-        os_log("%{public}@", log: log, type: type, finalMessage)
+        os_log("%{public}@", dso: dso, log: log, type: type, finalMessage)
     }
 
     open func logLevel(of flag: DDLogFlag) -> OSLogType {
@@ -46,16 +47,14 @@ open class OSLogger: DDAbstractLogger {
             return OSLog.default
         }
 
-        guard let target = logs[loggerTag.index] else {
-            return OSLog.default
-        }
-
-        return target
+        return loggerTag.log
     }
 
-    open func register(tags: [OSLoggerTag]) {
-        for tag in tags {
-            logs[tag.index] = tag.log
+    open func dynamicSharedObject(from rawTag: Any?) -> UnsafeRawPointer {
+        guard let loggerTag = rawTag as? OSLoggerTag else {
+            return #dsohandle
         }
+
+        return loggerTag.dso
     }
 }
