@@ -69,7 +69,7 @@ extension UserDefaults {
 }
 
 private extension MutableProperty where Value: Equatable {
-    func dbs_setValueIfDifferent(_ newValue: Value) {
+    func aibo_setValueIfDifferent(_ newValue: Value) {
         if self.value != newValue { self.value = newValue }
     }
 }
@@ -125,12 +125,51 @@ open class DefaultsBasedSettings: NSObject {
         defaults.addObserver(self, forKeyPath: keyPath, options: [.new], context: nil)
         observingKeyPathChangeCallbacks[keyPath] = { (newValue) in
             if newValue is NSNull {
-                property.dbs_setValueIfDifferent(defaultValue)
+                property.aibo_setValueIfDifferent(defaultValue)
             } else if let newValue = newValue as? T {
-                property.dbs_setValueIfDifferent(newValue)
+                property.aibo_setValueIfDifferent(newValue)
             } else {
                 LogError("Expect newValue \(newValue) has Type \(T.self) or NSNull but got \(type(of: newValue))", category: .settings)
-                property.dbs_setValueIfDifferent(defaultValue)
+                property.aibo_setValueIfDifferent(defaultValue)
+            }
+        }
+    }
+
+    public func bind<Property, Value>(
+        property: MutableProperty<Property>,
+        to key: DefaultsKey<Value>,
+        defaultValue: Property,
+        mapToValue: @escaping (Property) -> Value,
+        mapFromValue: @escaping (Value) -> Property
+    ) where
+        Property: Equatable,
+        Value: DefaultsCompatible,
+        Value: Equatable
+    {
+        // Initial value set from UserDefaults
+        property.value = defaults[key].map(mapFromValue) ?? defaultValue
+
+        // Binding changes in property -> UserDefaults
+        let disposable = property.skipRepeats().signal.observeValues { [weak self] (propertyValue) in
+            guard let strongSelf = self else { return }
+            let defaultsValue = mapToValue(propertyValue)
+            guard strongSelf.defaults[key] != defaultsValue else { return }
+            strongSelf.defaults[key] = defaultsValue
+        }
+        disposables.append(disposable)
+
+        // Binding changes in UserDefaults -> property
+        let keyPath = key.keyString
+        LogDebug("Register KVO keypath: \(keyPath)", category: .settings)
+        defaults.addObserver(self, forKeyPath: keyPath, options: [.new], context: nil)
+        observingKeyPathChangeCallbacks[keyPath] = { (newValue) in
+            if newValue is NSNull {
+                property.aibo_setValueIfDifferent(defaultValue)
+            } else if let newValue = newValue as? Value {
+                property.aibo_setValueIfDifferent(mapFromValue(newValue))
+            } else {
+                LogError("Expect newValue \(newValue) has Type \(Value.self) or NSNull but got \(type(of: newValue))", category: .settings)
+                property.aibo_setValueIfDifferent(defaultValue)
             }
         }
     }
@@ -159,12 +198,50 @@ open class DefaultsBasedSettings: NSObject {
         defaults.addObserver(self, forKeyPath: keyPath, options: [.new], context: nil)
         observingKeyPathChangeCallbacks[keyPath] = { (newValue) in
             if newValue is NSNull {
-                property.dbs_setValueIfDifferent(.none)
+                property.aibo_setValueIfDifferent(.none)
             } else if let newValue = newValue as? T {
-                property.dbs_setValueIfDifferent(.some(newValue))
+                property.aibo_setValueIfDifferent(.some(newValue))
             } else {
                 LogError("Expect newValue \(newValue) has Type \(T.self) or NSNull but got \(type(of: newValue))", category: .settings)
-                property.dbs_setValueIfDifferent(.none)
+                property.aibo_setValueIfDifferent(.none)
+            }
+        }
+    }
+
+    public func bind<Property, Value>(
+        property: MutableProperty<Property>,
+        to key: DefaultsKey<Value>,
+        mapToValue: @escaping (Property) -> Value?,
+        mapFromValue: @escaping (Value?) -> Property
+    ) where
+        Property: Equatable,
+        Value: DefaultsCompatible,
+        Value: Equatable
+    {
+        // Initial value set from UserDefaults
+        property.value = mapFromValue(defaults[key])
+
+        // Binding changes in property -> UserDefaults
+        let disposable = property.skipRepeats().signal.observeValues { [weak self] (propertyValue) in
+            guard let strongSelf = self else { return }
+            let defaultsValue = mapToValue(propertyValue)
+            guard strongSelf.defaults[key] != defaultsValue else { return }
+            strongSelf.defaults[key] = defaultsValue
+        }
+        disposables.append(disposable)
+
+        // Binding changes in UserDefaults -> property
+        let keyPath = "\(key.keyString)"
+        LogDebug("Register KVO keypath: \(keyPath)", category: .settings)
+        defaults.addObserver(self, forKeyPath: keyPath, options: [.new], context: nil)
+        observingKeyPathChangeCallbacks[keyPath] = { (newValue) in
+            if newValue is NSNull {
+                property.aibo_setValueIfDifferent(mapFromValue(Optional<Value>.none))
+            } else if let newValue = newValue as? Value {
+                property.aibo_setValueIfDifferent(mapFromValue(Optional<Value>.some(newValue)))
+            } else {
+                LogError("Expect newValue \(newValue) has Type \(Value.self) or NSNull but got \(type(of: newValue))", category: .settings)
+                property.aibo_setValueIfDifferent(mapFromValue(Optional<Value>.none))
             }
         }
     }
