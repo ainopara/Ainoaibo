@@ -74,35 +74,34 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
             return
         }
 
-        if #available(iOS 12.0, *) {
-            #if swift(>=4.1.50)
-            let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
-                if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
-                    completion(.failure(AuthError.cancelled))
-                    return
-                }
-
-                guard let callbackURL = callbackURL else {
-                    completion(.failure(AuthError.missingCallback))
-                    return
-                }
-
-                guard
-                    let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
-                    let code = queryItems.first(where: { $0.name == "code" })?.value
-                else {
-                    completion(.failure(AuthError.missingCode(url: callbackURL)))
-                    return
-                }
-
-                completion(.success(code))
-            }
-
-            currentSession = session
-
-            session.start()
-            #endif
-        } else if #available(iOS 11.0, *) {
+//        if #available(iOS 12.0, *) {
+//            let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
+//                if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
+//                    completion(.failure(AuthError.cancelled))
+//                    return
+//                }
+//
+//                guard let callbackURL = callbackURL else {
+//                    completion(.failure(AuthError.missingCallback))
+//                    return
+//                }
+//
+//                guard
+//                    let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
+//                    let code = queryItems.first(where: { $0.name == "code" })?.value
+//                else {
+//                    completion(.failure(AuthError.missingCode(url: callbackURL)))
+//                    return
+//                }
+//
+//                completion(.success(code))
+//            }
+//
+//            currentSession = session
+//
+//            session.start()
+//        } else
+        if #available(iOS 11.0, *) {
             let session = SFAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
                 if let error = error as? SFAuthenticationError, error.code == .canceledLogin {
                     completion(.failure(AuthError.cancelled))
