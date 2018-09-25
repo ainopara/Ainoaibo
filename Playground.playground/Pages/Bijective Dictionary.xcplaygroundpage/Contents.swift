@@ -21,4 +21,9 @@ for (key, value) in test {
 }
 
 test.add(key: "1", value: 5)
+
+for (key, value) in test {
+    print(key, value)
+}
+
 test.add(key: "s", value: 5)

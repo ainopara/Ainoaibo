@@ -29,7 +29,7 @@ extension BijectiveDictionary {
         }
 
         if valueToKey[value] != Optional<Key>.none {
-            print("Warning: Adding (key: \(key), value: \(value)) while key is already mapped to value \(keyToValue[key]!). Old pair is removed.")
+            print("Warning: Adding (key: \(key), value: \(value)) while value is already mapped to key \(valueToKey[value]!). Old pair is removed.")
             remove(value: value)
         }
 
