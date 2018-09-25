@@ -12,6 +12,8 @@
 		864A925220CFDE8400CDEDB8 /* Stash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864A925120CFDE8400CDEDB8 /* Stash.swift */; };
 		864D4C0320C6D75800FAC039 /* Ainoaibo.h in Headers */ = {isa = PBXBuildFile; fileRef = 864D4C0120C6D75800FAC039 /* Ainoaibo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		864D4C0A20C6D7BE00FAC039 /* DefaultsBasedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */; };
+		8652BCBA215A48B6003F2742 /* Recycler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652BCB9215A48B6003F2742 /* Recycler.swift */; };
+		8652BCBC215A48CD003F2742 /* WeakArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652BCBB215A48CD003F2742 /* WeakArray.swift */; };
 		8652E39520C7AD930074815D /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652E39420C7AD930074815D /* Logging.swift */; };
 		865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */; };
 		869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869D6B1D20C7C58700B0596C /* OSLogger.swift */; };
@@ -29,6 +31,8 @@
 		864D4C0120C6D75800FAC039 /* Ainoaibo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ainoaibo.h; sourceTree = "<group>"; };
 		864D4C0220C6D75800FAC039 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		864D4C0920C6D7BE00FAC039 /* DefaultsBasedSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultsBasedSettings.swift; sourceTree = "<group>"; };
+		8652BCB9215A48B6003F2742 /* Recycler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recycler.swift; sourceTree = "<group>"; };
+		8652BCBB215A48CD003F2742 /* WeakArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakArray.swift; sourceTree = "<group>"; };
 		8652E39420C7AD930074815D /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BijectiveDictionary.swift; sourceTree = "<group>"; };
 		867A112C20CA5435005C40A9 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -165,6 +169,8 @@
 				869D6B2420C7CF6C00B0596C /* SwiftExtension.swift */,
 				865D8FCE20CAB00500FAFADB /* BijectiveDictionary.swift */,
 				86BC799D20E3A58B00AD576D /* QuickSort.swift */,
+				8652BCB9215A48B6003F2742 /* Recycler.swift */,
+				8652BCBB215A48CD003F2742 /* WeakArray.swift */,
 			);
 			path = SwiftExtension;
 			sourceTree = "<group>";
@@ -292,8 +298,10 @@
 				865D8FCF20CAB00500FAFADB /* BijectiveDictionary.swift in Sources */,
 				86BC799E20E3A58B00AD576D /* QuickSort.swift in Sources */,
 				864A924B20CFDDC900CDEDB8 /* StateTransition.swift in Sources */,
+				8652BCBA215A48B6003F2742 /* Recycler.swift in Sources */,
 				869D6B2020C7C59B00B0596C /* LoggingProtocol.swift in Sources */,
 				869D6B1E20C7C58700B0596C /* OSLogger.swift in Sources */,
+				8652BCBC215A48CD003F2742 /* WeakArray.swift in Sources */,
 				869D6B2520C7CF6C00B0596C /* SwiftExtension.swift in Sources */,
 				8652E39520C7AD930074815D /* Logging.swift in Sources */,
 				86A50A9E20DDF6880029FFC5 /* Alamofire+ResponseDecodable.swift in Sources */,
