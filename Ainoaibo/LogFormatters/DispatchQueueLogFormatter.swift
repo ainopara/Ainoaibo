@@ -9,7 +9,6 @@
 import CocoaLumberjack
 
 public class DispatchQueueLogFormatter: DDDispatchQueueLogFormatter {
-
     public override func format(message logMessage: DDLogMessage) -> String? {
         let queueLabel = queueThreadLabel(for: logMessage) ?? "unknown-queue"
         return "@\(queueLabel) \(logMessage.message)"
