@@ -69,11 +69,12 @@ extension Alamofire.DataRequest {
                 allowNullResponse: allowNullResponse
             ),
             completionHandler: { (response: DataResponse<T>) in
+                let url = response.request?.url ?? URL(fileURLWithPath: "nil")
                 switch response.result {
                 case .success:
-                    LogDebug("\(response.request!.url!)" + "\n" + "\(response.timeline)", category: .network)
+                    LogDebug("\(url)" + "\n" + "\(response.timeline)", category: .network)
                 case let .failure(error):
-                    LogDebug("\(response.request!.url!)" + "\n" + "\(response.timeline)" + "\n" + String(dumping: error), category: .network)
+                    LogDebug("\(url)" + "\n" + "\(response.timeline)" + "\n" + String(dumping: error), category: .network)
                 }
 
                 completionHandler(response)
