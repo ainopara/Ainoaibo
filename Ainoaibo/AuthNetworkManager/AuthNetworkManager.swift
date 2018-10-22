@@ -8,9 +8,7 @@
 
 import Alamofire
 import SafariServices
-#if swift(>=4.1.50)
 import AuthenticationServices
-#endif
 
 public enum AuthError: Error {
     case configurationError(message: String)
@@ -37,7 +35,7 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
         set { sessionManager.retrier = newValue }
     }
 
-    private let sessionManager: SessionManager
+    public let sessionManager: SessionManager
 
     private var currentSession: Any?
     private weak var safariViewController: SFSafariViewController?
@@ -75,7 +73,6 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
         }
 
         if #available(iOS 12.0, *) {
-            #if swift(>=4.1.50)
             let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
                 if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
                     completion(.failure(AuthError.cancelled))
@@ -101,7 +98,6 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
             currentSession = session
 
             session.start()
-            #endif
         } else if #available(iOS 11.0, *) {
             let session = SFAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
                 if let error = error as? SFAuthenticationError, error.code == .canceledLogin {
