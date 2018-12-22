@@ -70,11 +70,12 @@ Pod::Spec.new do |s|
   s.subspec 'Alamofire+ResponseDecodable' do |ss|
     ss.source_files = "Ainoaibo/Alamofire+ResponseDecodable/*.swift"
     ss.dependency "Ainoaibo/Logging"
-    ss.dependency "Alamofire"
+    ss.dependency "Alamofire", '~> 4.0'
   end
 
   s.subspec 'AuthNetworkManager' do |ss|
     ss.source_files = "Ainoaibo/AuthNetworkManager/*.swift"
+    ss.dependency "Alamofire", '~> 4.0'
     ss.dependency "Ainoaibo/Alamofire+ResponseDecodable"
     ss.dependency "Ainoaibo/Logging"
   end
