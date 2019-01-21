@@ -43,6 +43,22 @@ extension Comparable {
             return self
         }
     }
+
+    public func aibo_clamped(to range: PartialRangeFrom<Self>) -> Self {
+        if self < range.lowerBound {
+            return range.lowerBound
+        } else {
+            return self
+        }
+    }
+
+    public func aibo_clamped(to range: PartialRangeThrough<Self>) -> Self {
+        if self > range.upperBound {
+            return range.upperBound
+        } else {
+            return self
+        }
+    }
 }
 
 extension String {

@@ -11,12 +11,10 @@ public enum QuickSortPartition {
 }
 
 extension RandomAccessCollection where Self: MutableCollection, Element: Comparable, Index == Int {
+
     private mutating func lomutoPartition() -> Index {
         let indexOfLastElement = self.index(before: self.endIndex)
         let pivot = self[indexOfLastElement]
-
-        // Debug
-        // print(self, pivot)
 
         var i = self.startIndex
 
