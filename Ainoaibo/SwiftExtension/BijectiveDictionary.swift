@@ -6,6 +6,12 @@
 //  Copyright © 2018 ain. All rights reserved.
 //
 
+#if compiler(>=5.0)
+
+#warning("FIXME: `BijectiveDictionary` is not compatible with Swift 5.0")
+
+#else
+
 public class BijectiveDictionary<Key: Hashable, Value: Hashable>: ExpressibleByDictionaryLiteral {
     private var keyToValue = Dictionary<Key, Value>()
     private var valueToKey = Dictionary<Value, Key>()
@@ -123,3 +129,5 @@ extension BijectiveDictionary: Collection {
         return keyToValue.index(after: i)
     }
 }
+
+#endif
