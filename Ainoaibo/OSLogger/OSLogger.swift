@@ -35,7 +35,7 @@ open class OSLogger: DDAbstractLogger {
         switch flag {
         case .verbose: return .debug
         case .debug:   return .default
-        case .info:    return .info
+        case .info:    return .default
         case .warning: return .error
         case .error:   return .fault
         default:       return .default
