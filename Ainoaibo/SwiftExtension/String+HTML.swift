@@ -8,7 +8,7 @@ import Foundation
 
 extension String {
     // Swift port of `gtm_stringByUnescapingFromHTML` from `GoogleToolbox`
-    public func bgm_stringByUnescapingFromHtml() -> String {
+    public func aibo_stringByUnescapingFromHTML() -> String {
         var range = self.startIndex..<self.endIndex
         var ampersandsSubrange = self.range(
             of: "&",
@@ -81,8 +81,8 @@ extension String {
     }
 }
 
-extension Substring {
-    fileprivate func character(at offset: Int) -> Character {
+private extension Substring {
+    func character(at offset: Int) -> Character {
         return self[self.index(self.startIndex, offsetBy: offset)]
     }
 }
