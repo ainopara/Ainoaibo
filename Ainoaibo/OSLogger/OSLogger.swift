@@ -5,8 +5,8 @@ import os
 open class OSLogger: DDAbstractLogger {
     @objc public static let shared = OSLogger()
 
-    open override var loggerName: String {
-        return "com.ainopara.osLogger"
+    open override var loggerName: DDLoggerName {
+        return DDLoggerName("com.ainopara.osLogger")
     }
 
     private(set) var logs: [String: OSLog] = [:]

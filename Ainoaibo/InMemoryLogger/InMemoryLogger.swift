@@ -17,8 +17,8 @@ public class InMemoryLogger: DDAbstractLogger {
 
     @objc public static let shared = InMemoryLogger()
 
-    public override var loggerName: String {
-        return "com.ainopara.inMemoryLogger"
+    public override var loggerName: DDLoggerName {
+        return DDLoggerName("com.ainopara.inMemoryLogger")
     }
 
     public var maxMessageEntity = 1000
