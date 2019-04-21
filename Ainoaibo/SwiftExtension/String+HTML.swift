@@ -9,37 +9,30 @@ import Foundation
 extension String {
     // Swift port of `gtm_stringByUnescapingFromHTML` from `GoogleToolbox`
     public func aibo_stringByUnescapingFromHTML() -> String {
-        var range = self.startIndex..<self.endIndex
-        var ampersandsSubrange = self.range(
-            of: "&",
-            options: .backwards,
-            range: range
-        )
+        var finalString = self
+        var range = finalString.startIndex..<finalString.endIndex
 
         // if no ampersands, we've got a quick way out
-        guard ampersandsSubrange != nil else {
-            return self
+        guard finalString.range(of: "&", options: .backwards, range: range) != nil else {
+            return finalString
         }
 
-        var finalString = self
-        repeat {
-            defer { ampersandsSubrange = self.range(of: "&", options: .backwards, range: range) }
+        while true {
 
-            let semiColonSearchRange = ampersandsSubrange!.lowerBound..<range.upperBound
-            let semiColonSubrange = self.range(
-                of: ";",
-                options: [],
-                range: semiColonSearchRange
-            )
-            range = self.startIndex..<ampersandsSubrange!.lowerBound
+            guard let ampersandsSubrange = finalString.range(of: "&", options: .backwards, range: range) else {
+                break
+            }
+
+            let semiColonSearchRange = ampersandsSubrange.lowerBound..<range.upperBound
+            range = range.lowerBound..<ampersandsSubrange.lowerBound
 
             // if we don't find a semicolon in the range, we don't have a sequence
-            if semiColonSubrange == nil {
+            guard let semiColonSubrange = finalString.range(of: ";", options: [], range: semiColonSearchRange) else {
                 continue
             }
 
-            let escapeRange = ampersandsSubrange!.lowerBound..<self.index(semiColonSubrange!.lowerBound, offsetBy: 1)
-            let escapeString = self[escapeRange]
+            let escapeRange = ampersandsSubrange.lowerBound..<semiColonSubrange.upperBound
+            let escapeString = finalString[escapeRange]
             let length = escapeString.count
 
             // a squence must be longer than 3 (&lt;) and less than 11 (&thetasym;)
@@ -75,7 +68,7 @@ extension String {
                     }
                 }
             }
-        } while ampersandsSubrange != nil
+        }
 
         return finalString
     }
