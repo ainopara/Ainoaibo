@@ -9,30 +9,36 @@ import Foundation
 extension String {
     // Swift port of `gtm_stringByUnescapingFromHTML` from `GoogleToolbox`
     public func aibo_stringByUnescapingFromHTML() -> String {
-        var finalString = self
-        var range = finalString.startIndex..<finalString.endIndex
 
-        // if no ampersands, we've got a quick way out
-        guard finalString.range(of: "&", options: .backwards, range: range) != nil else {
-            return finalString
-        }
+        var processedList: [Substring] = []
+        var todoSubstring: Substring? = self[...]
 
-        while true {
+        while todoSubstring != nil {
 
-            guard let ampersandsSubrange = finalString.range(of: "&", options: .backwards, range: range) else {
-                break
-            }
-
-            let semiColonSearchRange = ampersandsSubrange.lowerBound..<range.upperBound
-            range = range.lowerBound..<ampersandsSubrange.lowerBound
-
-            // if we don't find a semicolon in the range, we don't have a sequence
-            guard let semiColonSubrange = finalString.range(of: ";", options: [], range: semiColonSearchRange) else {
+            guard let currentSubstring = todoSubstring else {
                 continue
             }
 
-            let escapeRange = ampersandsSubrange.lowerBound..<semiColonSubrange.upperBound
-            let escapeString = finalString[escapeRange]
+            todoSubstring = nil
+
+            guard let ampersandIndex = currentSubstring.firstIndex(of: "&") else {
+                processedList.append(currentSubstring)
+                continue
+            }
+
+            processedList.append(currentSubstring[..<ampersandIndex])
+            let ampersandSubstring = currentSubstring[ampersandIndex...]
+
+            guard let semiColonIndex = ampersandSubstring.firstIndex(of: ";") else {
+                processedList.append(ampersandSubstring)
+                continue
+            }
+
+            let escapeString = ampersandSubstring[...semiColonIndex]
+            if let nextIndex = ampersandSubstring.index(semiColonIndex, offsetBy: 1, limitedBy: ampersandSubstring.endIndex) {
+                todoSubstring = ampersandSubstring[nextIndex...]
+            }
+
             let length = escapeString.count
 
             // a squence must be longer than 3 (&lt;) and less than 11 (&thetasym;)
@@ -47,7 +53,8 @@ extension String {
                         var value: UInt64 = 0
                         if scanner.scanHexInt64(&value) && scanner.scanLocation == hexSequence.count {
                             let scalar = UnicodeScalar(Int(value))!
-                            finalString.replaceSubrange(escapeRange, with: String(Character(scalar)))
+                            processedList.append(Substring(String(Character(scalar))))
+                            continue
                         }
                     } else {
                         // Decimal Sequences &#123;
@@ -57,20 +64,37 @@ extension String {
                         var value: Int = 0
                         if scanner.scanInt(&value) && scanner.scanLocation == numberSequence.count {
                             let scalar = UnicodeScalar(value)!
-                            finalString.replaceSubrange(escapeRange, with: String(Character(scalar)))
+                            processedList.append(Substring(String(Character(scalar))))
+                            continue
                         }
                     }
                 } else {
                     // "standard" sequences
                     if let value = gAsciiHTMLEscapeMap[String(escapeString)] {
                         let scalar = UnicodeScalar(value)!
-                        finalString.replaceSubrange(escapeRange, with: String(Character(scalar)))
+                        processedList.append(Substring(String(Character(scalar))))
+                        continue
                     }
+                }
+            }
+
+            processedList.append(Substring("&"))
+            if let todo = todoSubstring {
+                if let index = escapeString.index(escapeString.startIndex, offsetBy: 1, limitedBy: escapeString.endIndex) {
+                    todoSubstring = escapeString[index...] + todo
+                } else {
+                    todoSubstring = todo
+                }
+            } else {
+                if let index = escapeString.index(escapeString.startIndex, offsetBy: 1, limitedBy: escapeString.endIndex) {
+                    todoSubstring = escapeString[index...]
+                } else {
+                    todoSubstring = nil
                 }
             }
         }
 
-        return finalString
+        return processedList.joined()
     }
 }
 

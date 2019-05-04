@@ -1,9 +1,9 @@
 //
 //  DefaultsBasedSettings.swift
-//  Stage1st
+//  Ainoaibo
 //
 //  Created by Zheng Li on 2018/4/17.
-//  Copyright © 2018 Renaissance. All rights reserved.
+//  Copyright © 2018 ain. All rights reserved.
 //
 
 import ReactiveSwift

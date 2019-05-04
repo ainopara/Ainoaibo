@@ -52,7 +52,7 @@ class LoggerTag: OSLoggerTag {
 
 func LogDebug(
     _ message: @autoclosure () -> String,
-    level: DDLogLevel = defaultDebugLevel,
+    level: DDLogLevel = dynamicLogLevel,
     context: Int = 0,
     dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
@@ -64,7 +64,7 @@ func LogDebug(
     ddlog: DDLog = DDLog.sharedInstance
 ) {
     _DDLogMessage(
-        message,
+        message(),
         level: level,
         flag: .debug,
         context: context,
@@ -79,7 +79,7 @@ func LogDebug(
 
 func LogInfo(
     _ message: @autoclosure () -> String,
-    level: DDLogLevel = defaultDebugLevel,
+    level: DDLogLevel = dynamicLogLevel,
     context: Int = 0,
     dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
@@ -91,7 +91,7 @@ func LogInfo(
     ddlog: DDLog = DDLog.sharedInstance
 ) {
     _DDLogMessage(
-        message,
+        message(),
         level: level,
         flag: .info,
         context: context,
@@ -106,7 +106,7 @@ func LogInfo(
 
 func LogWarn(
     _ message: @autoclosure () -> String,
-    level: DDLogLevel = defaultDebugLevel,
+    level: DDLogLevel = dynamicLogLevel,
     context: Int = 0,
     dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
@@ -118,7 +118,7 @@ func LogWarn(
     ddlog: DDLog = DDLog.sharedInstance
 ) {
     _DDLogMessage(
-        message,
+        message(),
         level: level,
         flag: .warning,
         context: context,
@@ -133,7 +133,7 @@ func LogWarn(
 
 func LogVerbose(
     _ message: @autoclosure () -> String,
-    level: DDLogLevel = defaultDebugLevel,
+    level: DDLogLevel = dynamicLogLevel,
     context: Int = 0,
     dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
@@ -145,7 +145,7 @@ func LogVerbose(
     ddlog: DDLog = DDLog.sharedInstance
 ) {
     _DDLogMessage(
-        message,
+        message(),
         level: level,
         flag: .verbose,
         context: context,
@@ -160,7 +160,7 @@ func LogVerbose(
 
 func LogError(
     _ message: @autoclosure () -> String,
-    level: DDLogLevel = defaultDebugLevel,
+    level: DDLogLevel = dynamicLogLevel,
     context: Int = 0,
     dso: UnsafeRawPointer = #dsohandle,
     file: StaticString = #file,
@@ -172,7 +172,7 @@ func LogError(
     ddlog: DDLog = DDLog.sharedInstance
 ) {
     _DDLogMessage(
-        message,
+        message(),
         level: level,
         flag: .error,
         context: context,

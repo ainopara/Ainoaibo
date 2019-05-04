@@ -8,7 +8,11 @@ target 'Ainoaibo' do
   # Pods for Ainoaibo
   pod 'Alamofire'
   pod 'ReactiveSwift'
-  pod 'CocoaLumberjack', :git => 'https://github.com/ainopara/CocoaLumberjack.git', :branch => 'dispatch-queue-formatter-enhancement'
-  pod 'CocoaLumberjack/Swift', :git => 'https://github.com/ainopara/CocoaLumberjack.git', :branch => 'dispatch-queue-formatter-enhancement'
+  pod 'CocoaLumberjack'
+  pod 'CocoaLumberjack/Swift'
+
+  target 'AinoaiboTests' do
+    inherit! :search_paths
+  end
 
 end
