@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/ainopara/Ainoaibo"
   s.license      = "BSD"
   s.author       = { "ainopara" => "ainopara@gmail.com" }
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "10.0"
   s.source       = { :git => "https://github.com/ainopara/Ainoaibo.git", :tag => "#{s.version}" }
 
   s.swift_version = "4.0"
