@@ -8,14 +8,13 @@
 
 import Foundation
 
-extension Result where Failure == Swift.Error {
+extension Result {
 
-    public func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Failure> {
+    public func tryMap<NewSuccess>(_ transform: (Success) throws -> NewSuccess) -> Result<NewSuccess, Swift.Error> {
         switch self {
-        case .success(let success):
+        case .success(let value):
             do {
-                let transformed = try transform(success)
-                return .success(transformed)
+                return try .success(transform(value))
             } catch {
                 return .failure(error)
             }
