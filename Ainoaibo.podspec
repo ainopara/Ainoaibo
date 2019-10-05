@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "Ainoaibo"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "A collection of helper function / class to reuse in different projects while building iOS / macOS application."
 
   s.description  = <<-DESC
@@ -59,8 +59,8 @@ Pod::Spec.new do |s|
 
   s.subspec 'DefaultsBasedSettings' do |ss|
     ss.source_files = "Ainoaibo/DefaultsBasedSettings/*.swift"
+    ss.platform     = :ios, "13.1"
     ss.dependency "Ainoaibo/Logging"
-    ss.dependency "ReactiveSwift"
   end
 
   s.subspec 'StateTransition' do |ss|

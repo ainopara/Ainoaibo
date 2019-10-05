@@ -6,7 +6,7 @@
 //  Copyright © 2018 ain. All rights reserved.
 //
 
-import ReactiveSwift
+import Combine
 
 /// Extend this class and add your user defaults keys as static constants
 /// so you can use the shortcut dot notation (e.g. `Defaults[.yourKey]`)
@@ -68,8 +68,8 @@ extension UserDefaults {
     }
 }
 
-private extension MutableProperty where Value: Equatable {
-    func aibo_setValueIfDifferent(_ newValue: Value) {
+private extension CurrentValueSubject where Output: Equatable {
+    func aibo_setValueIfDifferent(_ newValue: Output) {
         if self.value != newValue { self.value = newValue }
     }
 }
@@ -79,7 +79,7 @@ private extension MutableProperty where Value: Equatable {
 open class DefaultsBasedSettings: NSObject {
     public let defaults: UserDefaults
     private var observingKeyPathChangeCallbacks: [String: ((Any) -> Void)] = [:]
-    private var disposables: [Disposable?] = []
+    private var disposables: [AnyCancellable] = []
 
     public init(defaults: UserDefaults) {
         self.defaults = defaults
@@ -92,7 +92,7 @@ open class DefaultsBasedSettings: NSObject {
         }
 
         for disposalbe in disposables {
-            disposalbe?.dispose()
+            disposalbe.cancel()
         }
     }
 
@@ -101,7 +101,7 @@ open class DefaultsBasedSettings: NSObject {
     }
 
     public func bind<T>(
-        property: MutableProperty<T>,
+        property: CurrentValueSubject<T, Never>,
         to key: DefaultsKey<T>,
         defaultValue: T
     ) where
@@ -112,7 +112,7 @@ open class DefaultsBasedSettings: NSObject {
         property.value = defaults[key] ?? defaultValue
 
         // Binding changes in property -> UserDefaults
-        let disposable = property.skipRepeats().signal.observeValues { [weak self] (value) in
+        let disposable = property.removeDuplicates().dropFirst().sink { [weak self] (value) in
             guard let strongSelf = self else { return }
             guard strongSelf.defaults[key] != value else { return }
             strongSelf.defaults[key] = value
@@ -136,7 +136,7 @@ open class DefaultsBasedSettings: NSObject {
     }
 
     public func bind<Property, Value>(
-        property: MutableProperty<Property>,
+        property: CurrentValueSubject<Property, Never>,
         to key: DefaultsKey<Value>,
         defaultValue: Property,
         mapToValue: @escaping (Property) -> Value,
@@ -150,7 +150,7 @@ open class DefaultsBasedSettings: NSObject {
         property.value = defaults[key].map(mapFromValue) ?? defaultValue
 
         // Binding changes in property -> UserDefaults
-        let disposable = property.skipRepeats().signal.observeValues { [weak self] (propertyValue) in
+        let disposable = property.removeDuplicates().dropFirst().sink { [weak self] (propertyValue) in
             guard let strongSelf = self else { return }
             let defaultsValue = mapToValue(propertyValue)
             guard strongSelf.defaults[key] != defaultsValue else { return }
@@ -175,7 +175,7 @@ open class DefaultsBasedSettings: NSObject {
     }
 
     public func bind<T>(
-        property: MutableProperty<T?>,
+        property: CurrentValueSubject<T?, Never>,
         to key: DefaultsKey<T>
     ) where
         T: DefaultsCompatible,
@@ -185,7 +185,7 @@ open class DefaultsBasedSettings: NSObject {
         property.value = defaults[key]
 
         // Binding changes in property -> UserDefaults
-        let disposable = property.skipRepeats().signal.observeValues { [weak self] (value) in
+        let disposable = property.removeDuplicates().dropFirst().sink { [weak self] (value) in
             guard let strongSelf = self else { return }
             guard strongSelf.defaults[key] != value else { return }
             strongSelf.defaults[key] = value
@@ -209,7 +209,7 @@ open class DefaultsBasedSettings: NSObject {
     }
 
     public func bind<Property, Value>(
-        property: MutableProperty<Property>,
+        property: CurrentValueSubject<Property, Never>,
         to key: DefaultsKey<Value>,
         mapToValue: @escaping (Property) -> Value?,
         mapFromValue: @escaping (Value?) -> Property
@@ -222,7 +222,7 @@ open class DefaultsBasedSettings: NSObject {
         property.value = mapFromValue(defaults[key])
 
         // Binding changes in property -> UserDefaults
-        let disposable = property.skipRepeats().signal.observeValues { [weak self] (propertyValue) in
+        let disposable = property.removeDuplicates().dropFirst().sink { [weak self] (propertyValue) in
             guard let strongSelf = self else { return }
             let defaultsValue = mapToValue(propertyValue)
             guard strongSelf.defaults[key] != defaultsValue else { return }
