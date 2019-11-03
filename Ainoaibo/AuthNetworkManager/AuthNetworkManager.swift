@@ -7,14 +7,13 @@
 //
 
 import Alamofire
-import SafariServices
 import AuthenticationServices
 
 public enum AuthError: Error {
     case configurationError(message: String)
     case retain
     case serverError(message: String)
-    case missingCallback
+    case missingCallback(error: Error)
     case missingCode(url: URL)
     case presentationError
     case missingToken
@@ -23,7 +22,7 @@ public enum AuthError: Error {
 
 // MARK: -
 
-public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate {
+public final class AuthNetworkManager: NSObject {
     public let clientID: String
     public let clientSecret: String
     public let redirectURI: String
@@ -35,11 +34,9 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
         set { sessionManager.retrier = newValue }
     }
 
-    public let sessionManager: SessionManager
+    public let sessionManager: Alamofire.SessionManager
 
-    private var currentSession: Any?
-    private weak var safariViewController: SFSafariViewController?
-    private var savedCompletionHandler: ((Result<String>) -> Void)?
+    private var currentSession: ASWebAuthenticationSession?
 
     public init(clientID: String, clientSecret: String, authorizeURL: String, redirectURI: String, accessTokenURL: String) {
         self.clientID = clientID
@@ -72,116 +69,32 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
             return
         }
 
-        if #available(iOS 12.0, *) {
-            let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
-                if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
-                    completion(.failure(AuthError.cancelled))
-                    return
-                }
-
-                guard let callbackURL = callbackURL else {
-                    completion(.failure(AuthError.missingCallback))
-                    return
-                }
-
-                guard
-                    let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
-                    let code = queryItems.first(where: { $0.name == "code" })?.value
-                else {
-                    completion(.failure(AuthError.missingCode(url: callbackURL)))
-                    return
-                }
-
-                completion(.success(code))
-            }
-
-            currentSession = session
-
-            session.start()
-        } else if #available(iOS 11.0, *) {
-            let session = SFAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
-                if let error = error as? SFAuthenticationError, error.code == .canceledLogin {
-                    completion(.failure(AuthError.cancelled))
-                    return
-                }
-
-                guard let callbackURL = callbackURL else {
-                    completion(.failure(AuthError.missingCallback))
-                    return
-                }
-
-                guard
-                    let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
-                    let code = queryItems.first(where: { $0.name == "code" })?.value
-                else {
-                    completion(.failure(AuthError.missingCode(url: callbackURL)))
-                    return
-                }
-
-                completion(.success(code))
-            }
-
-            currentSession = session
-
-            session.start()
-        } else {
-            // Fallback on earlier versions
-            let safariViewController = SFSafariViewController(url: targetURL)
-            safariViewController.delegate = self
-            self.safariViewController = safariViewController
-            guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
-                completion(.failure(AuthError.presentationError))
+        let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
+            if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
+                completion(.failure(AuthError.cancelled))
                 return
             }
 
-            savedCompletionHandler = completion
+            guard let callbackURL = callbackURL else {
+                completion(.failure(AuthError.missingCallback(error: error!)))
+                return
+            }
 
-            rootViewController.present(safariViewController, animated: true, completion: nil)
-        }
-    }
+            guard
+                let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
+                let code = queryItems.first(where: { $0.name == "code" })?.value
+            else {
+                completion(.failure(AuthError.missingCode(url: callbackURL)))
+                return
+            }
 
-//    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
-    public func continueAuthorizeCode(callbackURL: URL) {
-        guard let completion = savedCompletionHandler else {
-            LogError("Get callback with url: \(callbackURL) but can not found saved completion handler.")
-            return
-        }
-
-        guard
-            let queryItems = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false)?.queryItems,
-            let code = queryItems.first(where: { $0.name == "code" })?.value
-        else {
-            completion(.failure(AuthError.missingCode(url: callbackURL)))
-            return
-        }
-
-        guard let safariViewController = self.safariViewController else {
-            completion(.failure(AuthError.presentationError))
-            return
-        }
-
-        safariViewController.dismiss(animated: true) {
             completion(.success(code))
-
-            self.savedCompletionHandler = nil
-        }
-    }
-
-//    @available(iOS, obsoleted: 11.0, message: "This method should only be used in iOS 10")
-    private func cancelAuthorizeCode() {
-        guard let completion = savedCompletionHandler else {
-            LogError("Cancel called but can not found saved completion handler.")
-            return
         }
 
-        completion(.failure(AuthError.cancelled))
+        currentSession = session
 
-        savedCompletionHandler = nil
-    }
-
-
-    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        cancelAuthorizeCode()
+        session.presentationContextProvider = self
+        session.start()
     }
 
     @discardableResult
@@ -232,5 +145,14 @@ public final class AuthNetworkManager: NSObject, SFSafariViewControllerDelegate 
         return request
             .validate()
             .responseDecodable { (response) in completionBlock(response) }
+    }
+}
+
+// MARK: - ASWebAuthenticationPresentationContextProviding
+
+extension AuthNetworkManager: ASWebAuthenticationPresentationContextProviding {
+
+    public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return UIApplication.shared.keyWindow!
     }
 }
