@@ -25,6 +25,7 @@ public enum AuthError: Error {
 public final class AuthNetworkManager: NSObject {
     public let clientID: String
     public let clientSecret: String
+    public let callbackURLScheme: String
     public let redirectURI: String
     public let authorizeURL: String
     public let accessTokenURL: String
@@ -38,9 +39,10 @@ public final class AuthNetworkManager: NSObject {
 
     private var currentSession: ASWebAuthenticationSession?
 
-    public init(clientID: String, clientSecret: String, authorizeURL: String, redirectURI: String, accessTokenURL: String) {
+    public init(clientID: String, clientSecret: String, authorizeURL: String, callbackURLScheme: String, redirectURI: String, accessTokenURL: String) {
         self.clientID = clientID
         self.clientSecret = clientSecret
+        self.callbackURLScheme = callbackURLScheme
         self.redirectURI = redirectURI
         self.authorizeURL = authorizeURL
         self.accessTokenURL = accessTokenURL
@@ -69,7 +71,7 @@ public final class AuthNetworkManager: NSObject {
             return
         }
 
-        let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: redirectURI) { (callbackURL, error) in
+        let session = ASWebAuthenticationSession(url: targetURL, callbackURLScheme: callbackURLScheme) { (callbackURL, error) in
             if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
                 completion(.failure(AuthError.cancelled))
                 return
