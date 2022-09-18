@@ -15,66 +15,73 @@ public enum AllowNullResponse<T> {
     case allow(defaultValue: T)
 }
 
-extension Alamofire.DataRequest {
-    public static func decodableResponseSerializer<T: Decodable>(
-        handleErrorInResponse: ErrorInResponseHandler?,
-        allowNullResponse: AllowNullResponse<T>
-    ) -> DataResponseSerializer<T> {
-        return DataResponseSerializer { _, response, data, error in
-            guard error == nil else { return .failure(error!) }
+public class CodableResponseSerializer<T: Decodable>: ResponseSerializer {
 
-            let emptyDataStatusCodes: Set<Int> = [204, 205]
+    let handleErrorInResponse: ErrorInResponseHandler?
+    let allowNullResponse: AllowNullResponse<T>
 
-            if let response = response, emptyDataStatusCodes.contains(response.statusCode) {
-                // We are expecting json data returned from this request.
-                return .failure(AFError.responseSerializationFailed(reason: .inputDataNil))
+    init(handleErrorInResponse: ErrorInResponseHandler?, allowNullResponse: AllowNullResponse<T>) {
+        self.handleErrorInResponse = handleErrorInResponse
+        self.allowNullResponse = allowNullResponse
+    }
+
+    public func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> T {
+        guard error == nil else { throw error! }
+
+        let emptyDataStatusCodes: Set<Int> = [204, 205]
+
+        if let response = response, emptyDataStatusCodes.contains(response.statusCode) {
+            // We are expecting json data returned from this request.
+            throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
+        }
+
+        guard let validData = data, validData.count > 0 else {
+            throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
+        }
+
+        if case let .allow(defaultValue) = allowNullResponse, validData == "null".data(using: .utf8) {
+            return defaultValue
+        }
+
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+
+            if let errorInResponseHandler = handleErrorInResponse, let error = errorInResponseHandler(validData) {
+                throw error
             }
 
-            guard let validData = data, validData.count > 0 else {
-                return .failure(AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength))
-            }
-
-            if case let .allow(defaultValue) = allowNullResponse, validData == "null".data(using: .utf8) {
-                return .success(defaultValue)
-            }
-
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .secondsSince1970
-
-                if let errorInResponseHandler = handleErrorInResponse, let error = errorInResponseHandler(validData) {
-                    return .failure(error)
-                }
-
-                let json = try decoder.decode(T.self, from: validData)
-                return .success(json)
-            } catch {
-                LogError("Failed to serialize data as \(String(describing: T.self)): \(String(decoding: validData, as: UTF8.self))", category: .network)
-                return .failure(AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error)))
-            }
+            let json = try decoder.decode(T.self, from: validData)
+            return json
+        } catch {
+            LogError("Failed to serialize data as \(String(describing: T.self)): \(String(decoding: validData, as: UTF8.self))", category: .network)
+            throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: error))
         }
     }
+}
+
+extension Alamofire.DataRequest {
 
     @discardableResult
     public func responseDecodable<T: Decodable>(
         handleErrorInResponse: ErrorInResponseHandler? = nil,
         allowNullResponse: AllowNullResponse<T> = .no,
-        queue: DispatchQueue? = nil,
-        completionHandler: @escaping (DataResponse<T>) -> Void
+        queue: DispatchQueue = .main,
+        completionHandler: @escaping (AFDataResponse<T>) -> Void
     ) -> Self {
         return response(
             queue: queue,
-            responseSerializer: DataRequest.decodableResponseSerializer(
+            responseSerializer: CodableResponseSerializer(
                 handleErrorInResponse: handleErrorInResponse,
                 allowNullResponse: allowNullResponse
             ),
-            completionHandler: { (response: DataResponse<T>) in
+            completionHandler: { (response: AFDataResponse<T>) in
                 let url = response.request?.url ?? URL(fileURLWithPath: "nil")
                 switch response.result {
                 case .success:
-                    LogDebug("\(url)" + "\n" + "\(response.timeline)", category: .network)
+                    LogDebug("\(url)" + "\n", category: .network)
                 case let .failure(error):
-                    LogDebug("\(url)" + "\n" + "\(response.timeline)" + "\n" + String(dumping: error), category: .network)
+                    LogDebug("\(url)" + "\n" + String(dumping: error), category: .network)
                 }
 
                 completionHandler(response)

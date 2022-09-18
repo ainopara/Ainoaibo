@@ -30,16 +30,18 @@ public final class AuthNetworkManager: NSObject {
     public let authorizeURL: String
     public let accessTokenURL: String
 
-    public var retrier: RequestRetrier? {
-        get { return sessionManager.retrier }
-        set { sessionManager.retrier = newValue }
-    }
-
-    public let sessionManager: Alamofire.SessionManager
+    public let sessionManager: Alamofire.Session
 
     private var currentSession: ASWebAuthenticationSession?
 
-    public init(clientID: String, clientSecret: String, authorizeURL: String, callbackURLScheme: String, redirectURI: String, accessTokenURL: String) {
+    public init(
+        clientID: String,
+        clientSecret: String,
+        authorizeURL: String,
+        callbackURLScheme: String,
+        redirectURI: String,
+        accessTokenURL: String
+    ) {
         self.clientID = clientID
         self.clientSecret = clientSecret
         self.callbackURLScheme = callbackURLScheme
@@ -48,13 +50,13 @@ public final class AuthNetworkManager: NSObject {
         self.accessTokenURL = accessTokenURL
 
         let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
-        self.sessionManager = SessionManager(configuration: configuration)
+        configuration.httpAdditionalHeaders = HTTPHeaders.default.dictionary
+        self.sessionManager = Session(configuration: configuration)
 
         super.init()
     }
 
-    public func authorizeCode(state: String, completion: @escaping (Result<String>) -> Void) {
+    public func authorizeCode(state: String, completion: @escaping (Result<String, AuthError>) -> Void) {
         let params: Parameters = [
             "client_id": clientID,
             "response_type": "code",
@@ -103,7 +105,7 @@ public final class AuthNetworkManager: NSObject {
     public func accessToken<AccessToken: Decodable>(
         code: String,
         state: String,
-        completionBlock: @escaping (DataResponse<AccessToken>) -> Void
+        completionBlock: @escaping (AFDataResponse<AccessToken>) -> Void
     ) -> DataRequest {
         let params: Parameters = [
             "grant_type": "authorization_code",
@@ -128,7 +130,7 @@ public final class AuthNetworkManager: NSObject {
     @discardableResult
     public func accessToken<AccessToken: Decodable>(
         refreshToken: String,
-        completionBlock: @escaping (DataResponse<AccessToken>) -> Void
+        completionBlock: @escaping (AFDataResponse<AccessToken>) -> Void
     ) -> DataRequest {
         let params: Parameters = [
             "grant_type": "refresh_token",
